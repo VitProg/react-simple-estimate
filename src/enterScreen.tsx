@@ -4,7 +4,6 @@ import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from "react";
 import { getRandomId } from "./utils.ts";
 import { ID_PREFIX, LS_MODE, LS_MY_ID, LS_HOST_ID, LS_USER_NAME } from "./constants.ts";
 import { peer } from "./peer.ts";
-import { grey } from "@mui/material/colors";
 import { state } from "./state.ts";
 
 export const EnterScreen = observer(() => {
@@ -18,6 +17,7 @@ export const EnterScreen = observer(() => {
   const handleSubmit = useCallback((event: FormEvent<HTMLDivElement>) => {
     event.preventDefault();
     setMute(true);
+    state.setConnecting(true);
 
     peer.init(userName, myId)
       .then(() => {
@@ -33,6 +33,7 @@ export const EnterScreen = observer(() => {
           state.setImHost(true);
           state.setShowEnterForm(false);
         }
+        state.setConnecting(false);
       });
   }, [userName, myId, mode, hostId]);
 
@@ -91,12 +92,12 @@ export const EnterScreen = observer(() => {
       }}
     >
       <Typography component="h1" variant="h5">
-        Create / Enter planing room
+        Create / Enter planning room
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <FormControlLabel
           control={<Switch checked={mode == 'new'} color="primary" onChange={onModeChanged} />}
-          label={<span>Create new planing room <Typography component={'span'} sx={{color: "grey"}}>(You'd be the host)</Typography></span>}
+          label={<span>Create new planning room <Typography component={'span'} sx={{color: "grey"}}>(You'd be the host)</Typography></span>}
         />
         <TextField
           margin="normal"

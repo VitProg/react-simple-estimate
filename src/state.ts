@@ -12,6 +12,7 @@ class State {
   showEnterForm: boolean;
   imHost: boolean;
   fin: boolean;
+  connecting: boolean;
 
   constructor() {
     makeAutoObservable(this, {
@@ -23,6 +24,11 @@ class State {
     this.showEnterForm = true;
     this.imHost = false;
     this.fin = false;
+    this.connecting = false;
+  }
+
+  setConnecting(val: boolean) {
+    this.connecting = val;
   }
 
   setFin(val: boolean) {
@@ -89,6 +95,7 @@ class State {
 
   get avgTime() {
     const filtered = this.selectedCards.filter(sc => sc.type === "time");
+    if (filtered.length === 0) return 0;
     const avgFloat = filtered
       .reduce((acc, cur) => {
         const val = parseInt(cur.card + '', 10);
@@ -99,6 +106,7 @@ class State {
 
   get avgCert() {
     const filtered = this.selectedCards.filter(sc => sc.type === "cert");
+    if (filtered.length === 0) return 0;
     const avgFloat = filtered
       .reduce((acc, cur) => {
         const val = parseInt(cur.card + '', 10);
