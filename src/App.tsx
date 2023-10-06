@@ -57,7 +57,7 @@ export const App = observer(() => {
 
         {state.users.length > 0 && !state.connecting && (
           <>
-            <Stack spacing={2}>
+            <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" style={{marginTop: 20}}>
               {state.users.map(u => (
                 <Box key={u.id} color={state.hasUserSelectedBothCards(u.id) && u.ready ? 'green' : 'inherit'}>{u.name}</Box>
               ))}
@@ -90,9 +90,12 @@ export const App = observer(() => {
                 <>
                   <Typography color="green">Results:</Typography>
                   <Stack spacing={2}>
-                    {state.users.map(u => (
-                      <div key={u.id}>{u.name} - {state.userSelectedCard(u.id, 'time')?.card}h / {state.userSelectedCard(u.id, 'cert')?.card}%</div>
-                    ))}
+                    {state.users
+                        .filter(u => !!state.userSelectedCard(u.id, 'time') && !!state.userSelectedCard(u.id, 'cert'))
+                        .map(u => (
+                          <div key={u.id}>{u.name} - {state.userSelectedCard(u.id, 'time')?.card}h / {state.userSelectedCard(u.id, 'cert')?.card}%</div>
+                        ))
+                    }
                     <div>-------------------------</div>
                     <div>Avg: {state.avgTime}h / {state.avgCert}%</div>
                   </Stack>
